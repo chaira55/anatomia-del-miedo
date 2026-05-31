@@ -1,0 +1,64 @@
+.header {
+  margin-bottom: var(--s-5);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sangre);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-bottom: var(--s-3);
+}
+
+.eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sangre);
+  opacity: 0.4;
+  max-width: 80px;
+}
+
+.number {
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  color: var(--sangre);
+  opacity: 0.15;
+  position: absolute;
+  top: var(--s-5);
+  right: var(--s-5);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-chapter);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hueso);
+  line-height: 1.1;
+  margin-bottom: var(--s-3);
+}
+
+.subtitle {
+  font-family: var(--font-serif);
+  font-size: var(--fs-sub);
+  font-style: italic;
+  color: var(--gris);
+  line-height: 1.4;
+  max-width: 680px;
+}
+
+.divider {
+  width: 48px;
+  height: 2px;
+  background: var(--rojo);
+  margin-top: var(--s-4);
+}

@@ -1,0 +1,43 @@
+.wrap {
+  overflow: hidden;
+}
+
+.text {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--hueso);
+  max-width: 680px;
+  text-align: justify;
+  hyphens: auto;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quote {
+  font-family: var(--font-serif);
+  font-size: var(--fs-sub);
+  font-style: italic;
+  color: var(--gris);
+  border-left: 2px solid var(--sangre);
+  padding-left: var(--s-3);
+  margin: var(--s-4) 0;
+  max-width: 560px;
+  text-align: left; /* las citas van alineadas a la izquierda */
+}
+
+.quote .author {
+  display: block;
+  margin-top: var(--s-2);
+  font-size: var(--fs-label);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sangre);
+  font-style: normal;
+}

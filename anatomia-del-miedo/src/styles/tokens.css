@@ -1,0 +1,37 @@
+:root {
+  /* ---- Color ---- */
+  --negro: #0A0A0A;
+  --hueso: #E9E4DC;
+  --sangre: #7A1010;
+  --rojo: #C1121F;
+  --gris: #5A5550;
+
+  /* ---- Tipografía ---- */
+  --font-display: "Cinzel", serif;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-body: "Inter", sans-serif;
+
+  /* ---- Escala tipográfica ---- */
+  --fs-hero: clamp(3rem, 8vw, 6rem);
+  --fs-chapter: clamp(2.25rem, 5vw, 4rem);
+  --fs-sub: clamp(1.25rem, 2.5vw, 2rem);
+  --fs-body: clamp(1.0625rem, 1.3vw, 1.1875rem);
+  --fs-label: 0.8125rem;
+  --lh-body: 1.7;
+
+  /* ---- Espaciado (múltiplos de 8) ---- */
+  --s-1: 8px;
+  --s-2: 16px;
+  --s-3: 24px;
+  --s-4: 40px;
+  --s-5: 64px;
+  --s-6: 96px;
+
+  /* ---- Layout ---- */
+  --content-max: 1100px;
+  --nav-width: 200px;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.7s;
+}

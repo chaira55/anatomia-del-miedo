@@ -1,0 +1,16 @@
+.section {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--s-6) var(--s-5);
+  padding-left: calc(var(--nav-width) + var(--s-5));
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--s-5) var(--s-3);
+  }
+}

@@ -1,0 +1,47 @@
+/* ---- Keyframes reutilizables ---- */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glitch {
+  0%   { clip-path: inset(40% 0 61% 0); transform: translate(-4px, 0); }
+  20%  { clip-path: inset(92% 0 1%  0); transform: translate(4px, 0);  }
+  40%  { clip-path: inset(43% 0 1%  0); transform: translate(0, 0);    }
+  60%  { clip-path: inset(25% 0 58% 0); transform: translate(-3px, 0); }
+  80%  { clip-path: inset(54% 0 7%  0); transform: translate(3px, 0);  }
+  100% { clip-path: inset(58% 0 43% 0); transform: translate(0, 0);    }
+}
+
+@keyframes pulseRed {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(193, 18, 31, 0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(193, 18, 31, 0);  }
+}
+
+@keyframes flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
+  20%, 21.999%, 63%, 63.999%, 65%, 69.999%            { opacity: 0.6; }
+}

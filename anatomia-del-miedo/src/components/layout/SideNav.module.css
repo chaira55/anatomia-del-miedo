@@ -1,0 +1,131 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--nav-width);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--s-4) var(--s-3);
+  z-index: 100;
+  border-right: 1px solid rgba(122, 16, 16, 0.2);
+}
+
+.logo {
+  position: absolute;
+  top: var(--s-3);
+  left: var(--s-3);
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sangre);
+}
+
+.links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.link {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gris);
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: var(--s-1) 0;
+  transition: color var(--dur) var(--ease);
+  position: relative;
+}
+
+.link::before {
+  content: '';
+  position: absolute;
+  left: -var(--s-2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--rojo);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.link:hover {
+  color: var(--hueso);
+}
+
+.linkActive {
+  color: var(--rojo);
+}
+
+.linkActive::before {
+  opacity: 1;
+}
+
+/* ---- Hamburguesa (móvil) ---- */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: var(--s-3);
+  left: var(--s-3);
+  z-index: 200;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--s-1);
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--hueso);
+  transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+
+.hamburgerOpen span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburgerOpen span:nth-child(2) {
+  opacity: 0;
+}
+.hamburgerOpen span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .nav {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(122, 16, 16, 0.2);
+    background: var(--negro);
+    padding: var(--s-5) var(--s-3) var(--s-3);
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .navOpen {
+    transform: translateX(0);
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}

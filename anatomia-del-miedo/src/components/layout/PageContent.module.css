@@ -1,0 +1,23 @@
+.inner {
+  min-height: 100vh;
+  /* Centrado horizontal dentro de la página */
+  max-width: calc(var(--content-max) + var(--nav-width) + var(--s-5));
+  margin: 0 auto;
+  padding: var(--s-6) var(--s-5);
+  padding-left: calc(var(--nav-width) + var(--s-5));
+  position: relative;
+}
+
+@media (max-width: 1200px) {
+  .inner {
+    padding-left: calc(var(--nav-width) + var(--s-3));
+    padding-right: var(--s-4);
+  }
+}
+
+@media (max-width: 768px) {
+  .inner {
+    padding: var(--s-5) var(--s-3);
+    padding-top: calc(var(--s-5) + 44px);
+  }
+}

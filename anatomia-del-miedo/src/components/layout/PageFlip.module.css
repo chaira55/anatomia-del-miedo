@@ -1,0 +1,177 @@
+.book {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+
+  /*
+   * perspective en el PADRE es lo que crea la profundidad 3D real.
+   * Los hijos con rotateY se ven como si giraran en un espacio físico.
+   * 1400px = profundidad similar a ver un libro desde 70 cm.
+   */
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+}
+
+/* Fondo oscuro del interior del libro — visible durante la transición */
+.bookInterior {
+  position: absolute;
+  inset: 0;
+  background: #060606;
+  z-index: 0;
+}
+
+/* Lomo del libro */
+.spine {
+  position: absolute;
+  left: var(--nav-width);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(122, 16, 16, 0.35) 20%,
+    rgba(122, 16, 16, 0.35) 80%,
+    transparent
+  );
+  z-index: 50;
+  pointer-events: none;
+}
+
+.spineGlow {
+  position: absolute;
+  left: var(--nav-width);
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+  z-index: 49;
+  pointer-events: none;
+}
+
+/* Cada página ocupa el viewport completo — position absolute para respetar la perspectiva del padre */
+.page {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--negro);
+  transform-style: preserve-3d;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--sangre) transparent;
+}
+
+.page::-webkit-scrollbar       { width: 3px; }
+.page::-webkit-scrollbar-thumb { background: var(--sangre); border-radius: 2px; }
+
+/* ── Sombra del pliegue (barra oscura que cruza la pantalla) ── */
+.foldShadow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 300;
+}
+
+/* ── Canto del papel (línea fina clara en el borde que se "levanta") ── */
+.pageEdge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(233, 228, 220, 0.25) 20%,
+    rgba(233, 228, 220, 0.4)  50%,
+    rgba(233, 228, 220, 0.25) 80%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 310;
+}
+
+/* ── Flechas de navegación ── */
+.arrow {
+  position: fixed;
+  bottom: var(--s-3);
+  z-index: 500;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(122, 16, 16, 0.4);
+  background: rgba(10, 10, 10, 0.75);
+  color: var(--gris);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+  backdrop-filter: blur(6px);
+}
+
+.arrow:hover {
+  border-color: var(--rojo);
+  color: var(--hueso);
+  background: rgba(122, 16, 16, 0.18);
+}
+
+.arrow:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.arrowPrev { left:  calc(var(--nav-width) + var(--s-3)); }
+.arrowNext { right: var(--s-3); }
+
+.arrow svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* ── Indicador de puntos ── */
+.pageIndicator {
+  position: fixed;
+  bottom: var(--s-3);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--sangre);
+  opacity: 0.3;
+  transition:
+    opacity var(--dur) var(--ease),
+    transform var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  min-width: 5px;
+}
+
+.dotActive {
+  opacity: 1;
+  background: var(--rojo);
+  transform: scale(1.5);
+}
+
+@media (max-width: 768px) {
+  .spine, .spineGlow { display: none; }
+  .arrowPrev { left: var(--s-3); }
+  .pageIndicator { display: none; }
+}
