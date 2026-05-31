@@ -13,14 +13,16 @@ const titleVariants = {
   visible: { transition: { staggerChildren: 0.15 } },
 }
 
+const EASE = [0.16, 1, 0.3, 1] as const
+
 const lineVariants = {
   hidden:   { opacity: 0, y: 40, filter: 'blur(8px)' },
-  visible:  { opacity: 1, y: 0,  filter: 'blur(0px)', transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } },
+  visible:  { opacity: 1, y: 0,  filter: 'blur(0px)', transition: { duration: 1, ease: EASE } },
 }
 
 const fadeUp = {
   hidden:  { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0,  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+  visible: { opacity: 1, y: 0,  transition: { duration: 0.8, ease: EASE } },
 }
 
 export function Cover({ audio }: CoverProps) {

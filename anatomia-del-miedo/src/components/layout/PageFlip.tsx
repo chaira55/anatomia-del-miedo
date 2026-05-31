@@ -16,7 +16,6 @@ interface PageFlipProps {
   children?: ReactNode
 }
 
-const SECTION_IDS = ['portada', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cierre']
 const TURN_MS = 750
 
 export function PageFlip({ pages, children }: PageFlipProps) {
@@ -78,9 +77,10 @@ export function PageFlip({ pages, children }: PageFlipProps) {
         <AnimatePresence mode="sync" custom={dir}>
           <motion.div
             key={currentPage}
+            custom={dir}
             className={styles.page}
 
-            // ── ENTRADA: la nueva hoja emerge desde el fondo, ligeramente oscura ──
+            // ── ENTRADA ──
             initial={{
               zIndex: 1,
               rotateY: dir === 'forward' ? 6 : -6,
@@ -97,24 +97,16 @@ export function PageFlip({ pages, children }: PageFlipProps) {
               transition: {
                 delay: TURN_MS / 1000 * 0.55,
                 duration: 0.5,
-                ease: [0.16, 1, 0.3, 1],
+                ease: [0.16, 1, 0.3, 1] as const,
               },
             }}
 
-            // ── SALIDA: la hoja gira sobre su lomo hacia atrás ──
-            exit={(custom: unknown) => {
-              const d = custom as 'forward' | 'backward'
-              return {
-                zIndex: 2,
-                rotateY: d === 'forward' ? -90 : 90,
-                transformOrigin: d === 'forward' ? 'left center' : 'right center',
-                filter: 'brightness(0.04)',
-                transition: {
-                  duration: TURN_MS / 1000,
-                  ease: [0.6, 0, 0.95, 0.05],
-                },
-              }
+            // ── SALIDA: usa variants con custom para conocer la dirección al desmontar ──
+            variants={{
+              exitForward:  { zIndex: 2, rotateY: -90, transformOrigin: 'left center',  filter: 'brightness(0.04)', transition: { duration: TURN_MS / 1000, ease: [0.6, 0, 0.95, 0.05] as const } },
+              exitBackward: { zIndex: 2, rotateY:  90, transformOrigin: 'right center', filter: 'brightness(0.04)', transition: { duration: TURN_MS / 1000, ease: [0.6, 0, 0.95, 0.05] as const } },
             }}
+            exit={dir === 'forward' ? 'exitForward' : 'exitBackward'}
           >
             {pages[currentPage].content}
           </motion.div>

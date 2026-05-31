@@ -57,9 +57,7 @@ export function Chapter3Gallery() {
           'Los vampiros = seducción y contaminación. Los alienígenas = lo extranjero.',
           'El body horror contemporáneo refleja la angustia por la pérdida de control del propio cuerpo.',
         ]}
-        prevId="cap2"
         prevLabel="Anatomía del miedo"
-        nextId="cap4"
         nextLabel="Tipos de terror"
       />
     </>

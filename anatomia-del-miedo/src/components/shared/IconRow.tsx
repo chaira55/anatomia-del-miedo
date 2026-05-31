@@ -1,3 +1,5 @@
+import type { ReactElement } from 'react'
+import React from 'react'
 import styles from './IconRow.module.css'
 
 type IconType = 'video' | 'audio' | 'interactive' | 'gallery' | 'map' | 'quiz'
@@ -11,7 +13,7 @@ interface IconRowProps {
   items: IconRowItem[]
 }
 
-const ICONS: Record<IconType, JSX.Element> = {
+const ICONS: Record<IconType, ReactElement> = {
   video: (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/>
@@ -52,7 +54,7 @@ export function IconRow({ items }: IconRowProps) {
           {i > 0 && <span className={styles.separator} aria-hidden="true" />}
           <span className={styles.item}>
             <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-              {ICONS[type].props.children}
+              {(ICONS[type] as ReactElement<{ children: React.ReactNode }>).props.children}
             </svg>
             {label}
           </span>

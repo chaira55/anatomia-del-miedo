@@ -60,9 +60,7 @@ export function Chapter5Cases() {
           'The Substance (2024): la industria de la belleza y el horror de envejecer.',
           'Sinners (2025): la memoria histórica y la comunidad como escudo y amenaza.',
         ]}
-        prevId="cap4"
         prevLabel="Tipos de terror"
-        nextId="cierre"
         nextLabel="Descubre tu miedo"
       />
     </>

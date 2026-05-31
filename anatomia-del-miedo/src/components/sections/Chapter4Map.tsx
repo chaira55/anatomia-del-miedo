@@ -55,9 +55,7 @@ export function Chapter4Map() {
           'Body horror: el propio cuerpo traiciona, muta o es colonizado (The Fly, The Substance).',
           'Found footage: la cámara como testigo, la realidad como horror (El proyecto Blair Witch).',
         ]}
-        prevId="cap3"
         prevLabel="Los monstruos"
-        nextId="cap5"
         nextLabel="Terror contemporáneo"
       />
     </>

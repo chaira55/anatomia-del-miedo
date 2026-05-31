@@ -59,9 +59,7 @@ export function Chapter2Tools() {
           'La iluminación de bajo contraste (chiaroscuro) oculta tanto como revela.',
           'El diseño de producción crea mundos en los que las reglas normales no aplican.',
         ]}
-        prevId="cap1"
         prevLabel="Nacimiento del terror"
-        nextId="cap3"
         nextLabel="Los monstruos cambian"
       />
     </>

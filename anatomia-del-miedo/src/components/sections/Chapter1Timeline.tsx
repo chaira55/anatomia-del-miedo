@@ -57,7 +57,6 @@ export function Chapter1Timeline() {
           'Cada época proyecta sus miedos colectivos: la posguerra trajo invasiones alienígenas, los 70 el terror doméstico.',
           'El "terror elevado" (2010+) regresa al horror psicológico y a la alegoría social.',
         ]}
-        nextId="cap2"
         nextLabel="La anatomía del miedo"
       />
     </>

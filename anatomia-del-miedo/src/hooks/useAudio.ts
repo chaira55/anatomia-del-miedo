@@ -11,7 +11,6 @@ export interface AudioAPI {
 
 export function useAudio(): AudioAPI {
   const ctxRef = useRef<AudioContext | null>(null)
-  const ambientRef = useRef<AudioBufferSourceNode | null>(null)
   const gainRef = useRef<GainNode | null>(null)
   const [isMuted, setIsMuted] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
