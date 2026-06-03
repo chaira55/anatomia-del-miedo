@@ -10,10 +10,9 @@ export interface AudioAPI {
 }
 
 export function useAudio(): AudioAPI {
-  const ctxRef         = useRef<AudioContext | null>(null)
-  const gainRef        = useRef<GainNode | null>(null)
-  const audioElRef     = useRef<HTMLAudioElement | null>(null)
-  const turnBufferRef  = useRef<AudioBuffer | null>(null)
+  const ctxRef      = useRef<AudioContext | null>(null)
+  const gainRef     = useRef<GainNode | null>(null)
+  const audioElRef  = useRef<HTMLAudioElement | null>(null)
   const [isMuted,   setIsMuted]   = useState(false)
   const [isStarted, setIsStarted] = useState(false)
 
@@ -39,13 +38,6 @@ export function useAudio(): AudioAPI {
     audioElRef.current = audio
     audio.play().catch(() => {})
 
-    // Precargar sonido de página
-    fetch('/assets/audio/turnpage.mp3')
-      .then((r) => r.arrayBuffer())
-      .then((ab) => ctx.decodeAudioData(ab))
-      .then((buf) => { turnBufferRef.current = buf })
-      .catch(() => {})
-
     setIsStarted(true)
   }, [isStarted, getCtx])
 
@@ -62,25 +54,19 @@ export function useAudio(): AudioAPI {
   const playEffect = useCallback((_id: string) => {}, [])
 
   const playTransition = useCallback(() => {
-    if (isMuted) return
-    const ctx = getCtx()
-    if (!gainRef.current) return
+    if (!isStarted || isMuted) return
 
-    if (turnBufferRef.current) {
-      // Reproducir turnpage.mp3
-      const source = ctx.createBufferSource()
-      source.buffer = turnBufferRef.current
-      const ng = ctx.createGain()
-      ng.gain.value = 0.8
-      source.connect(ng)
-      ng.connect(gainRef.current)
-      source.start()
-    }
+    const sfx = new Audio('/assets/audio/turnpage.mp3')
+    sfx.volume = 0.8
+    sfx.play().catch(() => {})
 
     // Breve ducking del ambiente
-    gainRef.current.gain.setTargetAtTime(0.25, ctx.currentTime, 0.04)
-    gainRef.current.gain.setTargetAtTime(1, ctx.currentTime + 0.4, 0.12)
-  }, [getCtx, isMuted])
+    const ctx = getCtx()
+    if (gainRef.current) {
+      gainRef.current.gain.setTargetAtTime(0.25, ctx.currentTime, 0.04)
+      gainRef.current.gain.setTargetAtTime(1, ctx.currentTime + 0.4, 0.12)
+    }
+  }, [isStarted, isMuted, getCtx])
 
   return { start, toggleMute, isMuted, isStarted, playEffect, playTransition }
 }
