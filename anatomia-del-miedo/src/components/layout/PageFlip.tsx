@@ -1,7 +1,7 @@
 import {
   useState, useCallback, useEffect, useRef, type ReactNode,
 } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { NavContext } from '../../context/NavigationContext'
 import styles from './PageFlip.module.css'
 
@@ -18,27 +18,37 @@ interface PageFlipProps {
 }
 
 const TURN_MS = 550
+const EASE_OUT: [number, number, number, number] = [0.55, 0, 0.9, 0.05]
+const EASE_IN:  [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
-  const [currentPage, setCurrentPage]   = useState(0)
-  const [isTurning,   setIsTurning]     = useState(false)
-  const dirRef  = useRef<'forward' | 'backward'>('forward')
-  const lockRef = useRef(false)
-  const total   = pages.length
+  const [currentPage, setCurrentPage] = useState(0)
+  const [prevPage,    setPrevPage]    = useState<number | null>(null)
+  const [dir,         setDir]         = useState<'forward' | 'backward'>('forward')
+  const [exitDir,     setExitDir]     = useState<'forward' | 'backward'>('forward')
+  const [isTurning,   setIsTurning]   = useState(false)
+  const lockRef      = useRef(false)
+  const hasNavigated = useRef(false)
+  const total        = pages.length
 
   const goTo = useCallback((index: number) => {
     if (lockRef.current) return
     if (index < 0 || index >= total) return
-    dirRef.current  = index > currentPage ? 'forward' : 'backward'
-    lockRef.current = true
+    const newDir = index > currentPage ? 'forward' : 'backward'
+    lockRef.current    = true
+    hasNavigated.current = true
+    setExitDir(newDir)
+    setDir(newDir)
+    setPrevPage(currentPage)
     setIsTurning(true)
     setCurrentPage(index)
     onPageChange?.()
     setTimeout(() => {
       setIsTurning(false)
+      setPrevPage(null)
       lockRef.current = false
     }, TURN_MS + 350)
-  }, [currentPage, total])
+  }, [currentPage, total, onPageChange])
 
   const goNext = useCallback(() => goTo(currentPage + 1), [goTo, currentPage])
   const goPrev = useCallback(() => goTo(currentPage - 1), [goTo, currentPage])
@@ -60,8 +70,6 @@ export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
     dx < 0 ? goNext() : goPrev()
   }
 
-  const dir = dirRef.current
-
   return (
     <NavContext.Provider value={{ currentPage, total, goTo, goNext, goPrev }}>
       <div
@@ -69,87 +77,71 @@ export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {/* Interior oscuro del libro (visible durante la transición) */}
         <div className={styles.bookInterior} aria-hidden="true" />
+        <div className={styles.spine}        aria-hidden="true" />
+        <div className={styles.spineGlow}    aria-hidden="true" />
 
-        <div className={styles.spine}     aria-hidden="true" />
-        <div className={styles.spineGlow} aria-hidden="true" />
-
-        {/* ── Páginas ── */}
-        <AnimatePresence mode="sync" custom={dir}>
+        {/* ── Página saliente: siempre en el árbol de React con la dirección correcta ── */}
+        {prevPage !== null && (
           <motion.div
-            key={currentPage}
-            custom={dir}
+            key={`exit-${prevPage}`}
             className={styles.page}
-
-            // ── ENTRADA ──
-            initial={{
-              zIndex: 1,
-              rotateY: dir === 'forward' ? 10 : -10,
-              transformOrigin: dir === 'forward' ? 'left center' : 'right center',
-              filter: 'brightness(0.5) contrast(0.9)',
-              scale: 0.97,
-            }}
+            style={{ zIndex: 2 }}
+            initial={{ rotateY: 0, filter: 'brightness(1)', scale: 1 }}
             animate={{
-              zIndex: 1,
-              rotateY: 0,
-              transformOrigin: 'center center',
-              filter: 'brightness(1) contrast(1)',
-              scale: 1,
-              transition: {
-                delay: TURN_MS / 1000 * 0.45,
-                duration: 0.45,
-                ease: [0.16, 1, 0.3, 1] as const,
-              },
+              rotateY: exitDir === 'forward' ? -90 : 90,
+              transformOrigin: exitDir === 'forward' ? 'left center' : 'right center',
+              filter: 'brightness(0.08)',
             }}
-
-            // ── SALIDA: variant con función para recibir el custom actualizado al desmontar ──
-            variants={{
-              exit: (d: 'forward' | 'backward') => ({
-                zIndex: 2,
-                rotateY: d === 'forward' ? -90 : 90,
-                transformOrigin: d === 'forward' ? 'left center' : 'right center',
-                filter: 'brightness(0.08)',
-                transition: { duration: TURN_MS / 1000, ease: [0.55, 0, 0.9, 0.05] as const },
-              }),
-            }}
-            exit="exit"
+            transition={{ duration: TURN_MS / 1000, ease: EASE_OUT }}
           >
-            {pages[currentPage].content}
+            {pages[prevPage].content}
           </motion.div>
-        </AnimatePresence>
+        )}
 
-        {/* ── Sombra del pliegue que cruza la pantalla ── */}
-        <AnimatePresence>
-          {isTurning && (
-            <motion.div
-              key="fold-shadow"
-              className={styles.foldShadow}
-              style={{
-                background: dir === 'forward'
-                  ? 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.06) 32%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.85) 48%, rgba(255,248,235,0.18) 49.2%, rgba(255,248,235,0.35) 50%, rgba(255,248,235,0.18) 50.8%, rgba(0,0,0,0.85) 52%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.06) 68%, transparent 100%)'
-                  : 'linear-gradient(to left,  transparent 0%, rgba(0,0,0,0.06) 32%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.85) 48%, rgba(255,248,235,0.18) 49.2%, rgba(255,248,235,0.35) 50%, rgba(255,248,235,0.18) 50.8%, rgba(0,0,0,0.85) 52%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.06) 68%, transparent 100%)',
-              }}
-              initial={{ x: dir === 'forward' ? '50%' : '-50%' }}
-              animate={{ x: dir === 'forward' ? '-50%' : '50%' }}
-              exit={{ opacity: 0, transition: { duration: 0.15 } }}
-              transition={{ duration: TURN_MS / 1000, ease: [0.4, 0, 0.6, 1] }}
-            />
-          )}
-        </AnimatePresence>
+        {/* ── Página entrante ── */}
+        <motion.div
+          key={`page-${currentPage}`}
+          className={styles.page}
+          style={{ zIndex: 1 }}
+          initial={hasNavigated.current ? {
+            rotateY: dir === 'forward' ? 10 : -10,
+            transformOrigin: dir === 'forward' ? 'left center' : 'right center',
+            filter: 'brightness(0.5) contrast(0.9)',
+            scale: 0.97,
+          } : false}
+          animate={{
+            rotateY: 0,
+            transformOrigin: 'center center',
+            filter: 'brightness(1) contrast(1)',
+            scale: 1,
+          }}
+          transition={{
+            delay:    prevPage !== null ? TURN_MS / 1000 * 0.45 : 0,
+            duration: prevPage !== null ? 0.45 : 0,
+            ease: EASE_IN,
+          }}
+        >
+          {pages[currentPage].content}
+        </motion.div>
 
-        {/* ── Borde derecho iluminado de la página (canto del papel) ── */}
-        <AnimatePresence>
-          {isTurning && (
-            <motion.div
-              key="page-edge"
-              className={styles.pageEdge}
-              initial={{ opacity: 0, x: dir === 'forward' ? 0 : 'auto', right: dir === 'forward' ? 0 : 'auto', left: dir === 'forward' ? 'auto' : 0 }}
-              animate={{ opacity: [0, 1, 1, 0] }}
-              transition={{ duration: TURN_MS / 1000, times: [0, 0.1, 0.8, 1] }}
-            />
-          )}
-        </AnimatePresence>
+        {/* ── Sombra del pliegue ── */}
+        {isTurning && (
+          <motion.div
+            key={`fold-${currentPage}`}
+            className={styles.foldShadow}
+            style={{
+              background: exitDir === 'forward'
+                ? 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.06) 32%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.85) 48%, rgba(255,248,235,0.18) 49.2%, rgba(255,248,235,0.35) 50%, rgba(255,248,235,0.18) 50.8%, rgba(0,0,0,0.85) 52%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.06) 68%, transparent 100%)'
+                : 'linear-gradient(to left,  transparent 0%, rgba(0,0,0,0.06) 32%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.85) 48%, rgba(255,248,235,0.18) 49.2%, rgba(255,248,235,0.35) 50%, rgba(255,248,235,0.18) 50.8%, rgba(0,0,0,0.85) 52%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.06) 68%, transparent 100%)',
+              pointerEvents: 'none',
+              zIndex: 300,
+            }}
+            initial={{ x: exitDir === 'forward' ? '50%' : '-50%' }}
+            animate={{ x: exitDir === 'forward' ? '-50%' : '50%' }}
+            transition={{ duration: TURN_MS / 1000, ease: [0.4, 0, 0.6, 1] }}
+          />
+        )}
 
         {/* ── Flechas ── */}
         <button

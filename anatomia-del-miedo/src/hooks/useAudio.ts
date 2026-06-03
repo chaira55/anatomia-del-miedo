@@ -17,7 +17,8 @@ export function useAudio(): AudioAPI {
   const start = useCallback(() => {
     if (isStarted) return
 
-    const ambient = new Audio('/assets/audio/ambient.mp3')
+    const base = import.meta.env.BASE_URL
+    const ambient = new Audio(`${base}assets/audio/ambient.mp3`)
     ambient.loop   = true
     ambient.volume = 0.6
     ambient.play().catch(() => {})
@@ -38,7 +39,7 @@ export function useAudio(): AudioAPI {
 
   const playTransition = useCallback(() => {
     if (!isStarted || isMuted) return
-    const sfx = new Audio('/assets/audio/turnpage.mp3')
+    const sfx = new Audio(`${import.meta.env.BASE_URL}assets/audio/turnPage.mp3`)
     sfx.volume = 0.8
     sfx.play().catch(() => {})
   }, [isStarted, isMuted])
