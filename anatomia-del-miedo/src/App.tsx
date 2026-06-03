@@ -12,6 +12,15 @@ import { Chapter4Map } from './components/sections/Chapter4Map'
 import { Chapter5Cases } from './components/sections/Chapter5Cases'
 import { Closing } from './components/sections/Closing'
 
+const GLOWS = {
+  cap1:   'radial-gradient(ellipse at 85% 12%, rgba(160, 20, 20, 0.28) 0%, transparent 60%)',
+  cap2:   'radial-gradient(ellipse at 50% 5%,  rgba(15,  55, 120, 0.22) 0%, transparent 60%)',
+  cap3:   'radial-gradient(ellipse at 88% 80%, rgba(85,  15, 110, 0.26) 0%, transparent 60%)',
+  cap4:   'radial-gradient(ellipse at 50% 50%, rgba(10,  80,  70, 0.22) 0%, transparent 65%)',
+  cap5:   'radial-gradient(ellipse at 12% 12%, rgba(110, 55,  8,  0.26) 0%, transparent 60%)',
+  cierre: 'radial-gradient(ellipse at 50% 35%, rgba(160, 20, 20, 0.25) 0%, transparent 62%)',
+}
+
 export default function App() {
   const audio = useAudio()
 
@@ -24,32 +33,32 @@ export default function App() {
     {
       id: 'cap1',
       label: 'Cap. I',
-      content: <PageContent><Chapter1Timeline /></PageContent>,
+      content: <PageContent glow={GLOWS.cap1}><Chapter1Timeline /></PageContent>,
     },
     {
       id: 'cap2',
       label: 'Cap. II',
-      content: <PageContent><Chapter2Tools /></PageContent>,
+      content: <PageContent glow={GLOWS.cap2}><Chapter2Tools /></PageContent>,
     },
     {
       id: 'cap3',
       label: 'Cap. III',
-      content: <PageContent><Chapter3Gallery /></PageContent>,
+      content: <PageContent glow={GLOWS.cap3}><Chapter3Gallery /></PageContent>,
     },
     {
       id: 'cap4',
       label: 'Cap. IV',
-      content: <PageContent><Chapter4Map /></PageContent>,
+      content: <PageContent glow={GLOWS.cap4}><Chapter4Map /></PageContent>,
     },
     {
       id: 'cap5',
       label: 'Cap. V',
-      content: <PageContent><Chapter5Cases /></PageContent>,
+      content: <PageContent glow={GLOWS.cap5}><Chapter5Cases /></PageContent>,
     },
     {
       id: 'cierre',
       label: 'Cierre',
-      content: <PageContent><Closing /></PageContent>,
+      content: <PageContent glow={GLOWS.cierre}><Closing /></PageContent>,
     },
   ]
 

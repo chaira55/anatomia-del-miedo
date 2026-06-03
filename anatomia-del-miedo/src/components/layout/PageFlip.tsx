@@ -1,7 +1,7 @@
 import {
   useState, useCallback, useEffect, useRef, type ReactNode,
 } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { NavContext } from '../../context/NavigationContext'
 import styles from './PageFlip.module.css'
 
@@ -17,7 +17,7 @@ interface PageFlipProps {
   onPageChange?: () => void
 }
 
-const TURN_MS = 550
+const TURN_MS   = 550
 const EASE_OUT: [number, number, number, number] = [0.55, 0, 0.9, 0.05]
 const EASE_IN:  [number, number, number, number] = [0.16, 1, 0.3, 1]
 
@@ -30,13 +30,14 @@ export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
   const lockRef      = useRef(false)
   const hasNavigated = useRef(false)
   const total        = pages.length
+  const reduce       = useReducedMotion()
 
   const goTo = useCallback((index: number) => {
     if (lockRef.current) return
     if (index < 0 || index >= total) return
     const newDir = index > currentPage ? 'forward' : 'backward'
-    lockRef.current    = true
-    hasNavigated.current = true
+    lockRef.current       = true
+    hasNavigated.current  = true
     setExitDir(newDir)
     setDir(newDir)
     setPrevPage(currentPage)
@@ -70,6 +71,8 @@ export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
     dx < 0 ? goNext() : goPrev()
   }
 
+  const FADE_DUR = reduce ? 0.18 : TURN_MS / 1000
+
   return (
     <NavContext.Provider value={{ currentPage, total, goTo, goNext, goPrev }}>
       <div
@@ -80,20 +83,27 @@ export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
         <div className={styles.bookInterior} aria-hidden="true" />
         <div className={styles.spine}        aria-hidden="true" />
         <div className={styles.spineGlow}    aria-hidden="true" />
+        <div className={styles.pageEdge}     aria-hidden="true" />
 
-        {/* ── Página saliente: siempre en el árbol de React con la dirección correcta ── */}
+        {/* ── Página saliente ── */}
         {prevPage !== null && (
           <motion.div
             key={`exit-${prevPage}`}
             className={styles.page}
             style={{ zIndex: 2 }}
-            initial={{ rotateY: 0, filter: 'brightness(1)', scale: 1 }}
-            animate={{
-              rotateY: exitDir === 'forward' ? -90 : 90,
-              transformOrigin: exitDir === 'forward' ? 'left center' : 'right center',
-              filter: 'brightness(0.08)',
-            }}
-            transition={{ duration: TURN_MS / 1000, ease: EASE_OUT }}
+            initial={reduce
+              ? { opacity: 1 }
+              : { rotateY: 0, filter: 'brightness(1)', scale: 1 }
+            }
+            animate={reduce
+              ? { opacity: 0 }
+              : {
+                  rotateY: exitDir === 'forward' ? -90 : 90,
+                  transformOrigin: exitDir === 'forward' ? 'left center' : 'right center',
+                  filter: 'brightness(0.08)',
+                }
+            }
+            transition={{ duration: FADE_DUR, ease: reduce ? 'easeOut' : EASE_OUT }}
           >
             {pages[prevPage].content}
           </motion.div>
@@ -104,29 +114,37 @@ export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
           key={`page-${currentPage}`}
           className={styles.page}
           style={{ zIndex: 1 }}
-          initial={hasNavigated.current ? {
-            rotateY: dir === 'forward' ? 10 : -10,
-            transformOrigin: dir === 'forward' ? 'left center' : 'right center',
-            filter: 'brightness(0.5) contrast(0.9)',
-            scale: 0.97,
-          } : false}
-          animate={{
-            rotateY: 0,
-            transformOrigin: 'center center',
-            filter: 'brightness(1) contrast(1)',
-            scale: 1,
-          }}
+          initial={hasNavigated.current
+            ? reduce
+              ? { opacity: 0 }
+              : {
+                  rotateY: dir === 'forward' ? 10 : -10,
+                  transformOrigin: dir === 'forward' ? 'left center' : 'right center',
+                  filter: 'brightness(0.5) contrast(0.9)',
+                  scale: 0.97,
+                }
+            : false
+          }
+          animate={reduce
+            ? { opacity: 1 }
+            : {
+                rotateY: 0,
+                transformOrigin: 'center center',
+                filter: 'brightness(1) contrast(1)',
+                scale: 1,
+              }
+          }
           transition={{
-            delay:    prevPage !== null ? TURN_MS / 1000 * 0.45 : 0,
-            duration: prevPage !== null ? 0.45 : 0,
-            ease: EASE_IN,
+            delay:    prevPage !== null ? (reduce ? FADE_DUR * 0.8 : TURN_MS / 1000 * 0.45) : 0,
+            duration: prevPage !== null ? (reduce ? FADE_DUR : 0.45) : 0,
+            ease:     reduce ? 'easeIn' : EASE_IN,
           }}
         >
           {pages[currentPage].content}
         </motion.div>
 
-        {/* ── Sombra del pliegue ── */}
-        {isTurning && (
+        {/* ── Sombra del pliegue (solo sin reduce) ── */}
+        {isTurning && !reduce && (
           <motion.div
             key={`fold-${currentPage}`}
             className={styles.foldShadow}

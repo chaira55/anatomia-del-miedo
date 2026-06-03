@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import type { AudioAPI } from '../../hooks/useAudio'
 import { useNav } from '../../context/NavigationContext'
 import styles from './Cover.module.css'
@@ -8,16 +8,16 @@ interface CoverProps {
   audio: AudioAPI
 }
 
+const EASE = [0.16, 1, 0.3, 1] as const
+
 const titleVariants = {
-  hidden: {},
+  hidden:  {},
   visible: { transition: { staggerChildren: 0.15 } },
 }
 
-const EASE = [0.16, 1, 0.3, 1] as const
-
 const lineVariants = {
-  hidden:   { opacity: 0, y: 40, filter: 'blur(8px)' },
-  visible:  { opacity: 1, y: 0,  filter: 'blur(0px)', transition: { duration: 1, ease: EASE } },
+  hidden:  { opacity: 0, y: 40, filter: 'blur(8px)' },
+  visible: { opacity: 1, y: 0,  filter: 'blur(0px)', transition: { duration: 1, ease: EASE } },
 }
 
 const fadeUp = {
@@ -26,10 +26,11 @@ const fadeUp = {
 }
 
 export function Cover({ audio }: CoverProps) {
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const videoRef    = useRef<HTMLVideoElement>(null)
   const [videoReady, setVideoReady] = useState(false)
-  const [entered, setEntered] = useState(false)
-  const { goNext } = useNav()
+  const [entered,    setEntered]    = useState(false)
+  const { goNext }  = useNav()
+  const reduce      = useReducedMotion()
 
   useEffect(() => {
     const v = videoRef.current
@@ -45,10 +46,8 @@ export function Cover({ audio }: CoverProps) {
 
   return (
     <div className={styles.cover}>
-      {/* Fondo fallback (siempre visible, el video va encima) */}
       <div className={styles.fallbackBg} aria-hidden="true" />
 
-      {/* Video de fondo — colocar assets/video/cover.mp4 */}
       <video
         ref={videoRef}
         className={styles.video}
@@ -66,33 +65,45 @@ export function Cover({ audio }: CoverProps) {
       <div className={styles.content}>
         <motion.p
           className={styles.eyebrow}
-          initial={{ opacity: 0, letterSpacing: '0.8em' }}
-          animate={{ opacity: 1, letterSpacing: '0.4em' }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          {...(reduce ? {} : {
+            initial:    { opacity: 0, letterSpacing: '0.8em' },
+            animate:    { opacity: 1, letterSpacing: '0.4em' },
+            transition: { duration: 1.2, ease: EASE, delay: 0.2 },
+          })}
         >
           Una revista sobre el cine de terror
         </motion.p>
 
         <motion.h1
           className={styles.title}
-          variants={titleVariants}
-          initial="hidden"
-          animate="visible"
+          {...(reduce ? {} : {
+            variants: titleVariants,
+            initial:  'hidden',
+            animate:  'visible',
+          })}
         >
-          <motion.span className={styles.titleLine} variants={lineVariants}>
+          <motion.span
+            className={styles.titleLine}
+            {...(reduce ? {} : { variants: lineVariants })}
+          >
             Anatomía
           </motion.span>
-          <motion.span className={styles.titleLine} variants={lineVariants}>
+          <motion.span
+            className={styles.titleLine}
+            {...(reduce ? {} : { variants: lineVariants })}
+          >
             del Miedo
           </motion.span>
         </motion.h1>
 
         <motion.p
           className={styles.question}
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.8 }}
+          {...(reduce ? {} : {
+            variants:   fadeUp,
+            initial:    'hidden',
+            animate:    'visible',
+            transition: { delay: 0.8 },
+          })}
         >
           ¿Por qué nos gusta sentir miedo?
         </motion.p>
@@ -101,10 +112,12 @@ export function Cover({ audio }: CoverProps) {
           <motion.button
             className={styles.btn}
             onClick={handleEnter}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: 1.2 }}
+            {...(reduce ? {} : {
+              variants:   fadeUp,
+              initial:    'hidden',
+              animate:    'visible',
+              transition: { delay: 1.2 },
+            })}
             aria-label="Entrar a la revista"
             disabled={entered}
           >

@@ -69,6 +69,12 @@
 
 .linkActive::before {
   opacity: 1;
+  animation: dotPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(193, 18, 31, 0.45); }
+  50%       { box-shadow: 0 0 0 7px rgba(193, 18, 31, 0); }
 }
 
 /* ---- Hamburguesa (móvil) ---- */

@@ -1,6 +1,7 @@
 import { ChapterHeader } from '../shared/ChapterHeader'
 import { RevealText, RevealQuote } from '../shared/RevealText'
 import { ChapterFooter } from '../shared/ChapterFooter'
+import { GeniallyEmbed } from '../shared/GeniallyEmbed'
 
 export function Chapter3Gallery() {
   return (
@@ -23,31 +24,10 @@ export function Chapter3Gallery() {
         ocultar o controlar. Por eso cada época crea sus propias criaturas.
       </RevealQuote>
 
-      {/* Genially — galería interactiva de monstruos */}
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        paddingBottom: '56.25%',
-        marginTop: 'var(--s-4)',
-        borderRadius: '4px',
-        overflow: 'hidden',
-        border: '1px solid rgba(122,16,16,0.2)',
-      }}>
-        <iframe
-          src="https://view.genially.com/6a1da0aef064f449e18f9d9c"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            border: 'none',
-          }}
-          allowFullScreen
-          loading="lazy"
-          title="Los monstruos cambian: galería interactiva"
-        />
-      </div>
+      <GeniallyEmbed
+        src="https://view.genially.com/6a1da0aef064f449e18f9d9c"
+        title="Los monstruos cambian: galería interactiva"
+      />
 
       <ChapterFooter
         summary={[

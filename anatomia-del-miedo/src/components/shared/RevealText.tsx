@@ -36,11 +36,6 @@ export function RevealQuote({ children, author }: QuoteProps) {
     <blockquote
       ref={ref as React.RefObject<HTMLQuoteElement>}
       className={`${styles.quote} ${visible ? styles.visible : ''}`}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'opacity var(--dur) var(--ease), transform var(--dur) var(--ease)',
-      }}
     >
       {children}
       {author && <cite className={styles.author}>— {author}</cite>}

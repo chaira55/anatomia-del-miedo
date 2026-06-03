@@ -1,0 +1,113 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+
+.card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: var(--s-3) var(--s-3) var(--s-3) calc(var(--s-3) + 10px);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+
+.card:hover,
+.card:focus-visible {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.cardActive {
+  background: rgba(193, 18, 31, 0.08) !important;
+  border-color: rgba(193, 18, 31, 0.45) !important;
+  transform: none !important;
+}
+
+.cardAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--accent, var(--sangre));
+  opacity: 0.5;
+  transition: opacity 0.25s ease;
+}
+
+.card:hover .cardAccent,
+.card:focus-visible .cardAccent,
+.cardActive .cardAccent {
+  opacity: 1;
+}
+
+.cardYear {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-bottom: 6px;
+}
+
+.cardTitle {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hueso);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.cardDirector {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--gris);
+}
+
+.detail {
+  margin-top: var(--s-3);
+  padding: var(--s-4);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid var(--accent, var(--sangre));
+  border-radius: 3px;
+  animation: fadeInUp 0.35s ease forwards;
+}
+
+.detailGenre {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gris);
+  margin-bottom: var(--s-2);
+}
+
+.detailTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hueso);
+  margin-bottom: var(--s-3);
+}
+
+.detailText {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.75;
+  color: var(--hueso);
+  opacity: 0.88;
+}

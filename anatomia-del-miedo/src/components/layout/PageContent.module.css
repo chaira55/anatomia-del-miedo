@@ -1,11 +1,25 @@
 .inner {
   min-height: 100vh;
-  /* Centrado horizontal dentro de la página */
   max-width: calc(var(--content-max) + var(--nav-width) + var(--s-5));
   margin: 0 auto;
   padding: var(--s-6) var(--s-5);
   padding-left: calc(var(--nav-width) + var(--s-5));
   position: relative;
+  isolation: isolate;
+}
+
+/*
+ * Capa de glow atmosférico. position: fixed para cubrir el viewport
+ * completo (el padre .page tiene will-change: transform que lo ancla
+ * a la página). z-index: -1 lo mantiene siempre detrás del contenido.
+ */
+.inner::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--glow, none);
+  pointer-events: none;
+  z-index: -1;
 }
 
 @media (max-width: 1200px) {
