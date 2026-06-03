@@ -477,9 +477,9 @@ export function Closing() {
           marginBottom: 'var(--s-4)',
         }}>
           {[
-            { role: 'Dirección editorial', names: ['— nombre —'] },
-            { role: 'Contenido e investigación', names: ['— nombre —', '— nombre —'] },
-            { role: 'Diseño & desarrollo', names: ['— nombre —'] },
+            { role: 'Dirección editorial', names: ['Sofía Usuga Gaviria'] },
+            { role: 'Contenido e investigación', names: ['Sofía Usuga Gaviria'] },
+            { role: 'Diseño & desarrollo', names: ['Sharik Jimena Guzmán Arroyo', 'Jacobo Losada Higuita'] },
           ].map(({ role, names }) => (
             <div key={role}>
               <p style={{
