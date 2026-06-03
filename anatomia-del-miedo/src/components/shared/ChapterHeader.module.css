@@ -62,3 +62,15 @@
   background: var(--rojo);
   margin-top: var(--s-4);
 }
+
+@media (max-width: 768px) {
+  .header {
+    margin-bottom: var(--s-4);
+  }
+  .number {
+    display: none;
+  }
+  .subtitle {
+    max-width: 100%;
+  }
+}

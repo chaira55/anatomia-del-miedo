@@ -64,10 +64,16 @@ export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
   }, [goNext, goPrev])
 
   const touchStartX = useRef(0)
-  const onTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX }
-  const onTouchEnd   = (e: React.TouchEvent) => {
+  const touchStartY = useRef(0)
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+  }
+  const onTouchEnd = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - touchStartX.current
-    if (Math.abs(dx) < 50) return
+    const dy = e.changedTouches[0].clientY - touchStartY.current
+    if (Math.abs(dx) < 60) return
+    if (Math.abs(dy) > Math.abs(dx)) return
     dx < 0 ? goNext() : goPrev()
   }
 

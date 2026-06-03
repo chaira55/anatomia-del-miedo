@@ -325,3 +325,18 @@
   text-align: center;
   opacity: 0.45;
 }
+
+@media (max-width: 768px) {
+  .intro {
+    padding: var(--s-4) var(--s-3);
+  }
+  .quizBody {
+    padding: var(--s-3);
+  }
+  .resultBody {
+    padding: var(--s-3);
+  }
+  .introSubtitle {
+    max-width: 100%;
+  }
+}

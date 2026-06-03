@@ -73,3 +73,16 @@
   height: 16px;
   fill: currentColor;
 }
+
+@media (max-width: 600px) {
+  .nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--s-1);
+  }
+  .navBtn {
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(122, 16, 16, 0.15);
+    padding-bottom: var(--s-1);
+  }
+}
