@@ -10,9 +10,10 @@ export interface AudioAPI {
 }
 
 export function useAudio(): AudioAPI {
-  const ctxRef      = useRef<AudioContext | null>(null)
-  const gainRef     = useRef<GainNode | null>(null)
-  const audioElRef  = useRef<HTMLAudioElement | null>(null)
+  const ctxRef         = useRef<AudioContext | null>(null)
+  const gainRef        = useRef<GainNode | null>(null)
+  const audioElRef     = useRef<HTMLAudioElement | null>(null)
+  const turnBufferRef  = useRef<AudioBuffer | null>(null)
   const [isMuted,   setIsMuted]   = useState(false)
   const [isStarted, setIsStarted] = useState(false)
 
@@ -30,13 +31,20 @@ export function useAudio(): AudioAPI {
     const ctx = getCtx()
     if (ctx.state === 'suspended') ctx.resume()
 
-    // Cargar y reproducir ambient.mp3
+    // Audio ambiente en loop
     const audio = new Audio('/assets/audio/ambient.mp3')
     audio.loop = true
     const source = ctx.createMediaElementSource(audio)
     source.connect(gainRef.current!)
     audioElRef.current = audio
     audio.play().catch(() => {})
+
+    // Precargar sonido de página
+    fetch('/assets/audio/turnpage.mp3')
+      .then((r) => r.arrayBuffer())
+      .then((ab) => ctx.decodeAudioData(ab))
+      .then((buf) => { turnBufferRef.current = buf })
+      .catch(() => {})
 
     setIsStarted(true)
   }, [isStarted, getCtx])
@@ -54,32 +62,24 @@ export function useAudio(): AudioAPI {
   const playEffect = useCallback((_id: string) => {}, [])
 
   const playTransition = useCallback(() => {
+    if (isMuted) return
     const ctx = getCtx()
-    if (!gainRef.current || isMuted) return
+    if (!gainRef.current) return
 
-    // Susurro de papel al pasar la página
-    const bufLen = Math.floor(ctx.sampleRate * 0.18)
-    const buffer = ctx.createBuffer(1, bufLen, ctx.sampleRate)
-    const data   = buffer.getChannelData(0)
-    for (let i = 0; i < bufLen; i++) {
-      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.045))
+    if (turnBufferRef.current) {
+      // Reproducir turnpage.mp3
+      const source = ctx.createBufferSource()
+      source.buffer = turnBufferRef.current
+      const ng = ctx.createGain()
+      ng.gain.value = 0.8
+      source.connect(ng)
+      ng.connect(gainRef.current)
+      source.start()
     }
-    const source = ctx.createBufferSource()
-    source.buffer = buffer
-    const filter = ctx.createBiquadFilter()
-    filter.type = 'bandpass'
-    filter.frequency.value = 4500
-    filter.Q.value = 0.8
-    const ng = ctx.createGain()
-    ng.gain.value = 0.22
-    source.connect(filter)
-    filter.connect(ng)
-    ng.connect(gainRef.current)
-    source.start()
 
     // Breve ducking del ambiente
     gainRef.current.gain.setTargetAtTime(0.25, ctx.currentTime, 0.04)
-    gainRef.current.gain.setTargetAtTime(1, ctx.currentTime + 0.35, 0.12)
+    gainRef.current.gain.setTargetAtTime(1, ctx.currentTime + 0.4, 0.12)
   }, [getCtx, isMuted])
 
   return { start, toggleMute, isMuted, isStarted, playEffect, playTransition }
