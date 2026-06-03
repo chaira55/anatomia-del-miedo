@@ -10,10 +10,9 @@ export interface AudioAPI {
 }
 
 export function useAudio(): AudioAPI {
-  const ctxRef        = useRef<AudioContext | null>(null)
-  const gainRef       = useRef<GainNode | null>(null)
-  const ambientGainRef = useRef<GainNode | null>(null)
-  const oscRefs       = useRef<OscillatorNode[]>([])
+  const ctxRef      = useRef<AudioContext | null>(null)
+  const gainRef     = useRef<GainNode | null>(null)
+  const audioElRef  = useRef<HTMLAudioElement | null>(null)
   const [isMuted,   setIsMuted]   = useState(false)
   const [isStarted, setIsStarted] = useState(false)
 
@@ -26,51 +25,21 @@ export function useAudio(): AudioAPI {
     return ctxRef.current
   }, [])
 
-  const startAmbience = useCallback((ctx: AudioContext) => {
-    if (!gainRef.current || oscRefs.current.length > 0) return
-
-    const ag = ctx.createGain()
-    ag.gain.setValueAtTime(0, ctx.currentTime)
-    ag.gain.setTargetAtTime(0.07, ctx.currentTime, 3.0)
-    ag.connect(gainRef.current)
-    ambientGainRef.current = ag
-
-    // Drone: fundamental + fifth + octave con leve desafinación
-    const configs: [number, OscillatorType, number][] = [
-      [36,  'sine',     0],
-      [54,  'sine',     4],
-      [72,  'triangle', -3],
-      [108, 'sine',     2],
-    ]
-
-    configs.forEach(([freq, type, detune]) => {
-      const osc = ctx.createOscillator()
-      osc.type = type
-      osc.frequency.value = freq
-      osc.detune.value = detune
-      osc.connect(ag)
-      osc.start()
-      oscRefs.current.push(osc)
-    })
-
-    // LFO muy lento para movimiento sutil de amplitud
-    const lfo = ctx.createOscillator()
-    const lfoGain = ctx.createGain()
-    lfo.frequency.value = 0.07
-    lfoGain.gain.value = 0.018
-    lfo.connect(lfoGain)
-    lfoGain.connect(ag.gain)
-    lfo.start()
-    oscRefs.current.push(lfo)
-  }, [])
-
   const start = useCallback(() => {
     if (isStarted) return
     const ctx = getCtx()
     if (ctx.state === 'suspended') ctx.resume()
-    startAmbience(ctx)
+
+    // Cargar y reproducir ambient.mp3
+    const audio = new Audio('/assets/audio/ambient.mp3')
+    audio.loop = true
+    const source = ctx.createMediaElementSource(audio)
+    source.connect(gainRef.current!)
+    audioElRef.current = audio
+    audio.play().catch(() => {})
+
     setIsStarted(true)
-  }, [isStarted, getCtx, startAmbience])
+  }, [isStarted, getCtx])
 
   const toggleMute = useCallback(() => {
     const ctx = getCtx()
@@ -82,9 +51,7 @@ export function useAudio(): AudioAPI {
     })
   }, [getCtx])
 
-  const playEffect = useCallback((_id: string) => {
-    // Reservado para efectos futuros por sección
-  }, [])
+  const playEffect = useCallback((_id: string) => {}, [])
 
   const playTransition = useCallback(() => {
     const ctx = getCtx()
@@ -97,15 +64,12 @@ export function useAudio(): AudioAPI {
     for (let i = 0; i < bufLen; i++) {
       data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.045))
     }
-
     const source = ctx.createBufferSource()
     source.buffer = buffer
-
     const filter = ctx.createBiquadFilter()
     filter.type = 'bandpass'
     filter.frequency.value = 4500
     filter.Q.value = 0.8
-
     const ng = ctx.createGain()
     ng.gain.value = 0.22
     source.connect(filter)
