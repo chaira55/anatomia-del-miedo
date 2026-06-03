@@ -103,12 +103,17 @@ export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
               },
             }}
 
-            // ── SALIDA: usa variants con custom para conocer la dirección al desmontar ──
+            // ── SALIDA: variant con función para recibir el custom actualizado al desmontar ──
             variants={{
-              exitForward:  { zIndex: 2, rotateY: -90, transformOrigin: 'left center',  filter: 'brightness(0.08)', transition: { duration: TURN_MS / 1000, ease: [0.55, 0, 0.9, 0.05] as const } },
-              exitBackward: { zIndex: 2, rotateY:  90, transformOrigin: 'right center', filter: 'brightness(0.08)', transition: { duration: TURN_MS / 1000, ease: [0.55, 0, 0.9, 0.05] as const } },
+              exit: (d: 'forward' | 'backward') => ({
+                zIndex: 2,
+                rotateY: d === 'forward' ? -90 : 90,
+                transformOrigin: d === 'forward' ? 'left center' : 'right center',
+                filter: 'brightness(0.08)',
+                transition: { duration: TURN_MS / 1000, ease: [0.55, 0, 0.9, 0.05] as const },
+              }),
             }}
-            exit={dir === 'forward' ? 'exitForward' : 'exitBackward'}
+            exit="exit"
           >
             {pages[currentPage].content}
           </motion.div>
