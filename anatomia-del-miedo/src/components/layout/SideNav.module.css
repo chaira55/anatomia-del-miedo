@@ -48,7 +48,7 @@
 .link::before {
   content: '';
   position: absolute;
-  left: -var(--s-2);
+  left: calc(-1 * var(--s-2));
   top: 50%;
   transform: translateY(-50%);
   width: 4px;

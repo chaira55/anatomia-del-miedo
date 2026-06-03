@@ -1,6 +1,5 @@
 import { ChapterHeader } from '../shared/ChapterHeader'
 import { RevealText } from '../shared/RevealText'
-import { IconRow } from '../shared/IconRow'
 import { ChapterFooter } from '../shared/ChapterFooter'
 
 export function Chapter4Map() {
@@ -14,46 +13,49 @@ export function Chapter4Map() {
       />
 
       <RevealText>
-        El terror psicológico trabaja con la ambigüedad y el silencio. El sobrenatural,
-        con lo incomprensible. El slasher, con la persecución y la supervivencia.
-        El found footage, con la ilusión de realidad. El folk horror, con lo primitivo
-        que persiste bajo la civilización. El body horror, con el cuerpo como campo de batalla.
+        ¿Por qué algunas películas nos aterran y otras no nos provocan nada? Dos personas
+        pueden ver la misma película. Una puede dormir perfectamente. La otra puede pasar
+        semanas pensando en ella.
       </RevealText>
 
-      <RevealText delay={100}>
-        El mapa radial permite explorar cada subgénero, sus características y las películas
-        que lo definen, desde el nodo central hacia cada rama.
+      <RevealText delay={80}>
+        Esto ocurre porque no existe un único miedo. Cada subgénero del terror explora una
+        ansiedad diferente: la muerte, la enfermedad, la pérdida de identidad, el aislamiento
+        o lo desconocido.
       </RevealText>
 
-      <IconRow items={[
-        { type: 'map', label: 'Mapa radial' },
-        { type: 'interactive', label: '6 subgéneros' },
-        { type: 'video', label: 'Clips de ejemplo' },
-      ]} />
-
+      {/* Genially — mapa visual de subgéneros */}
       <div style={{
-        height: '120px',
-        border: '1px dashed rgba(122,16,16,0.3)',
-        borderRadius: '4px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'var(--gris)',
-        fontFamily: 'var(--font-body)',
-        fontSize: 'var(--fs-label)',
-        letterSpacing: '0.15em',
-        textTransform: 'uppercase',
+        position: 'relative',
+        width: '100%',
+        paddingBottom: '56.25%',
         marginTop: 'var(--s-4)',
+        borderRadius: '4px',
+        overflow: 'hidden',
+        border: '1px solid rgba(122,16,16,0.2)',
       }}>
-        Mapa radial: MIEDO → 6 ramas — Fase 5
+        <iframe
+          src="https://view.genially.com/6a1dba6739f22dd24ff1fb5b"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            border: 'none',
+          }}
+          allowFullScreen
+          loading="lazy"
+          title="Los distintos tipos de terror: mapa visual"
+        />
       </div>
 
       <ChapterFooter
         summary={[
-          'Psicológico: la amenaza vive en la mente del protagonista (y del espectador).',
-          'Folk horror: el pasado y la comunidad como fuente de terror (Midsommar, The Wicker Man).',
+          'Psicológico: la amenaza vive en la mente del protagonista — y del espectador.',
+          'Folk horror: la comunidad aislada y sus rituales como fuente de terror (Midsommar, The Witch).',
           'Body horror: el propio cuerpo traiciona, muta o es colonizado (The Fly, The Substance).',
-          'Found footage: la cámara como testigo, la realidad como horror (El proyecto Blair Witch).',
+          'Found footage: la cámara como testigo, la realidad como horror (Blair Witch Project).',
         ]}
         prevLabel="Los monstruos"
         nextLabel="Terror contemporáneo"

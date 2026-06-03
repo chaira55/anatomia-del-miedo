@@ -14,11 +14,12 @@ export interface PageDef {
 interface PageFlipProps {
   pages: PageDef[]
   children?: ReactNode
+  onPageChange?: () => void
 }
 
-const TURN_MS = 750
+const TURN_MS = 550
 
-export function PageFlip({ pages, children }: PageFlipProps) {
+export function PageFlip({ pages, children, onPageChange }: PageFlipProps) {
   const [currentPage, setCurrentPage]   = useState(0)
   const [isTurning,   setIsTurning]     = useState(false)
   const dirRef  = useRef<'forward' | 'backward'>('forward')
@@ -32,6 +33,7 @@ export function PageFlip({ pages, children }: PageFlipProps) {
     lockRef.current = true
     setIsTurning(true)
     setCurrentPage(index)
+    onPageChange?.()
     setTimeout(() => {
       setIsTurning(false)
       lockRef.current = false
@@ -83,28 +85,28 @@ export function PageFlip({ pages, children }: PageFlipProps) {
             // ── ENTRADA ──
             initial={{
               zIndex: 1,
-              rotateY: dir === 'forward' ? 6 : -6,
+              rotateY: dir === 'forward' ? 10 : -10,
               transformOrigin: dir === 'forward' ? 'left center' : 'right center',
-              filter: 'brightness(0.35)',
-              scale: 0.98,
+              filter: 'brightness(0.5) contrast(0.9)',
+              scale: 0.97,
             }}
             animate={{
               zIndex: 1,
               rotateY: 0,
               transformOrigin: 'center center',
-              filter: 'brightness(1)',
+              filter: 'brightness(1) contrast(1)',
               scale: 1,
               transition: {
-                delay: TURN_MS / 1000 * 0.55,
-                duration: 0.5,
+                delay: TURN_MS / 1000 * 0.45,
+                duration: 0.45,
                 ease: [0.16, 1, 0.3, 1] as const,
               },
             }}
 
             // ── SALIDA: usa variants con custom para conocer la dirección al desmontar ──
             variants={{
-              exitForward:  { zIndex: 2, rotateY: -90, transformOrigin: 'left center',  filter: 'brightness(0.04)', transition: { duration: TURN_MS / 1000, ease: [0.6, 0, 0.95, 0.05] as const } },
-              exitBackward: { zIndex: 2, rotateY:  90, transformOrigin: 'right center', filter: 'brightness(0.04)', transition: { duration: TURN_MS / 1000, ease: [0.6, 0, 0.95, 0.05] as const } },
+              exitForward:  { zIndex: 2, rotateY: -90, transformOrigin: 'left center',  filter: 'brightness(0.08)', transition: { duration: TURN_MS / 1000, ease: [0.55, 0, 0.9, 0.05] as const } },
+              exitBackward: { zIndex: 2, rotateY:  90, transformOrigin: 'right center', filter: 'brightness(0.08)', transition: { duration: TURN_MS / 1000, ease: [0.55, 0, 0.9, 0.05] as const } },
             }}
             exit={dir === 'forward' ? 'exitForward' : 'exitBackward'}
           >
@@ -120,8 +122,8 @@ export function PageFlip({ pages, children }: PageFlipProps) {
               className={styles.foldShadow}
               style={{
                 background: dir === 'forward'
-                  ? 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 38%, rgba(0,0,0,0.75) 48%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.75) 52%, rgba(0,0,0,0.15) 62%, transparent 100%)'
-                  : 'linear-gradient(to left,  transparent 0%, rgba(0,0,0,0.15) 38%, rgba(0,0,0,0.75) 48%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.75) 52%, rgba(0,0,0,0.15) 62%, transparent 100%)',
+                  ? 'linear-gradient(to right, transparent 0%, rgba(0,0,0,0.06) 32%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.85) 48%, rgba(255,248,235,0.18) 49.2%, rgba(255,248,235,0.35) 50%, rgba(255,248,235,0.18) 50.8%, rgba(0,0,0,0.85) 52%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.06) 68%, transparent 100%)'
+                  : 'linear-gradient(to left,  transparent 0%, rgba(0,0,0,0.06) 32%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.85) 48%, rgba(255,248,235,0.18) 49.2%, rgba(255,248,235,0.35) 50%, rgba(255,248,235,0.18) 50.8%, rgba(0,0,0,0.85) 52%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.06) 68%, transparent 100%)',
               }}
               initial={{ x: dir === 'forward' ? '50%' : '-50%' }}
               animate={{ x: dir === 'forward' ? '-50%' : '50%' }}

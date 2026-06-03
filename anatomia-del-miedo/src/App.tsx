@@ -54,7 +54,7 @@ export default function App() {
   ]
 
   return (
-    <PageFlip pages={pages}>
+    <PageFlip pages={pages} onPageChange={audio.playTransition}>
       <SideNav />
       <ProgressBar />
       <AudioToggle audio={audio} />

@@ -32,3 +32,9 @@
   color: var(--gris);
   border-color: var(--gris);
 }
+
+.inactive {
+  color: var(--gris);
+  border-color: rgba(90, 85, 80, 0.4);
+  opacity: 0.6;
+}

@@ -1,6 +1,5 @@
 import { ChapterHeader } from '../shared/ChapterHeader'
 import { RevealText, RevealQuote } from '../shared/RevealText'
-import { IconRow } from '../shared/IconRow'
 import { ChapterFooter } from '../shared/ChapterFooter'
 
 export function Chapter3Gallery() {
@@ -14,47 +13,47 @@ export function Chapter3Gallery() {
       />
 
       <RevealText>
-        El vampiro del siglo XIX era la sexualidad reprimida. El alienígena de los 50, el comunismo.
-        El asesino enmascarado de los 80, el suburbanio. El monstruo corporal de hoy, la crisis
-        de identidad en la era de las redes sociales.
+        Si el miedo es universal, ¿por qué los monstruos cambian constantemente? Los monstruos
+        nunca son solo monstruos. Son símbolos. Representan aquello que una sociedad teme en un
+        momento específico de la historia.
       </RevealText>
 
-      <RevealQuote author="Carol J. Clover, 'Men, Women and Chainsaws'">
-        El género de terror no es escapismo. Es el único género que le permite a la cultura
-        mirar directamente a sus miedos más profundos sin desviar la vista.
+      <RevealQuote author="Robin Wood (1986)">
+        El monstruo cinematográfico suele representar aquello que una cultura intenta reprimir,
+        ocultar o controlar. Por eso cada época crea sus propias criaturas.
       </RevealQuote>
 
-      <RevealText delay={100}>
-        La galería explora cinco arquetipos del monstruo cinematográfico y cómo cada uno
-        mutó a lo largo del tiempo en respuesta a la ansiedad cultural de su época.
-      </RevealText>
-
-      <IconRow items={[
-        { type: 'gallery', label: 'Galería interactiva' },
-        { type: 'interactive', label: '5 arquetipos' },
-      ]} />
-
+      {/* Genially — galería interactiva de monstruos */}
       <div style={{
-        height: '120px',
-        border: '1px dashed rgba(122,16,16,0.3)',
-        borderRadius: '4px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'var(--gris)',
-        fontFamily: 'var(--font-body)',
-        fontSize: 'var(--fs-label)',
-        letterSpacing: '0.15em',
-        textTransform: 'uppercase',
+        position: 'relative',
+        width: '100%',
+        paddingBottom: '56.25%',
         marginTop: 'var(--s-4)',
+        borderRadius: '4px',
+        overflow: 'hidden',
+        border: '1px solid rgba(122,16,16,0.2)',
       }}>
-        Galería: Vampiros · Demonios · Asesinos · Alienígenas · Cuerpo — Fase 5
+        <iframe
+          src="https://view.genially.com/6a1da0aef064f449e18f9d9c"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            border: 'none',
+          }}
+          allowFullScreen
+          loading="lazy"
+          title="Los monstruos cambian: galería interactiva"
+        />
       </div>
 
       <ChapterFooter
         summary={[
           'El monstruo encarna el miedo social de la época en que fue creado.',
-          'Los vampiros = seducción y contaminación. Los alienígenas = lo extranjero.',
+          'El vampiro: seducción y contaminación. El demonio: pérdida de autonomía.',
+          'El asesino humano es el más aterrador: no necesita poderes sobrenaturales.',
           'El body horror contemporáneo refleja la angustia por la pérdida de control del propio cuerpo.',
         ]}
         prevLabel="Anatomía del miedo"

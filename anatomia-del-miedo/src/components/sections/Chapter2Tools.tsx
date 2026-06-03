@@ -1,6 +1,5 @@
 import { ChapterHeader } from '../shared/ChapterHeader'
-import { RevealText, RevealQuote } from '../shared/RevealText'
-import { IconRow } from '../shared/IconRow'
+import { RevealText } from '../shared/RevealText'
 import { ChapterFooter } from '../shared/ChapterFooter'
 
 export function Chapter2Tools() {
@@ -14,50 +13,47 @@ export function Chapter2Tools() {
       />
 
       <RevealText>
-        El miedo en el cine no ocurre en la pantalla: ocurre en el cerebro del espectador.
-        Los directores de terror son ingenieros de la atención, que manipulan tiempo, luz y sonido
-        para forzar respuestas fisiológicas involuntarias.
+        Antes de que aparezca un monstruo. Antes del grito. Antes del susto. Nuestro cerebro
+        ya sabe que algo está mal. El cine de terror no genera miedo por accidente. Cada sombra,
+        cada silencio y cada corte de edición está diseñado para manipular nuestras emociones.
       </RevealText>
 
-      <RevealQuote author="Bernard Herrmann, compositor de Psicosis">
-        Sin mi música, la escena de la ducha habría sido un cuadro. Con ella, se convirtió en un ataque.
-      </RevealQuote>
-
-      <RevealText delay={100}>
-        Cada herramienta opera en una capa diferente de la percepción. El sonido llega primero,
-        antes de que el ojo procese la imagen. El montaje controla el ritmo del miedo.
-        La fotografía dirige la mirada hacia lo que no queremos ver.
+      <RevealText delay={80}>
+        Por eso el miedo no vive únicamente en la historia. Vive en cómo la historia está contada.
       </RevealText>
 
-      <IconRow items={[
-        { type: 'audio', label: 'Ejemplos sonoros' },
-        { type: 'video', label: 'Escenas clave' },
-        { type: 'interactive', label: '4 herramientas' },
-      ]} />
-
+      {/* Genially — anatomía del miedo interactivo */}
       <div style={{
-        height: '120px',
-        border: '1px dashed rgba(122,16,16,0.3)',
-        borderRadius: '4px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'var(--gris)',
-        fontFamily: 'var(--font-body)',
-        fontSize: 'var(--fs-label)',
-        letterSpacing: '0.15em',
-        textTransform: 'uppercase',
+        position: 'relative',
+        width: '100%',
+        paddingBottom: '56.25%',
         marginTop: 'var(--s-4)',
+        borderRadius: '4px',
+        overflow: 'hidden',
+        border: '1px solid rgba(122,16,16,0.2)',
       }}>
-        Botones de herramientas — Fase 5
+        <iframe
+          src="https://view.genially.com/6a1da07639f22dd24fe4cabe"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            border: 'none',
+          }}
+          allowFullScreen
+          loading="lazy"
+          title="La anatomía del miedo: herramientas cinematográficas"
+        />
       </div>
 
       <ChapterFooter
         summary={[
           'El sonido anticipa el peligro antes de que la imagen lo confirme.',
-          'El montaje discontinuo (cortes abruptos) eleva el cortisol del espectador.',
-          'La iluminación de bajo contraste (chiaroscuro) oculta tanto como revela.',
-          'El diseño de producción crea mundos en los que las reglas normales no aplican.',
+          'La iluminación cinematográfica dirige la mirada y oculta información de forma deliberada.',
+          'El montaje controla cuánto y cuándo sabe el espectador: la espera suele ser peor que el susto.',
+          'El diseño de producción convierte el espacio en un personaje que conspira contra el protagonista.',
         ]}
         prevLabel="Nacimiento del terror"
         nextLabel="Los monstruos cambian"
